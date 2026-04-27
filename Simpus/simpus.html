@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMPUS EL SADA - Sistem Perpustakaan Digital</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- LOGIN OVERLAY -->
+    <div id="loginOverlay" class="overlay active">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-university"></i>
+                <h2>SIMPUS EL SADA</h2>
+                <p>Sistem Informasi Perpustakaan</p>
+            </div>
+            <form id="adminLoginForm">
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn-primary full">
+                    <i class="fas fa-sign-in-alt"></i> Masuk Admin
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="mainApp" class="app-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-book-open"></i>
+                <h3>SIMPUS EL SADA</h3>
+                <button id="logoutBtn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-link active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="#" class="nav-link" data-page="books">
+                    <i class="fas fa-book"></i> Buku
+                </a>
+                <a href="#" class="nav-link" data-page="members">
+                    <i class="fas fa-users"></i> Anggota
+                </a>
+                <a href="#" class="nav-link" data-page="loans">
+                    <i class="fas fa-exchange-alt"></i> Peminjaman
+                </a>
+                <a href="#" class="nav-link" data-page="reports">
+                    <i class="fas fa-chart-bar"></i> Laporan
+                </a>
+                <a href="#" class="nav-link" data-page="activity">
+                    <i class="fas fa-history"></i> Aktivitas
+                </a>
+                <a href="#" class="nav-link" data-page="settings">
+                    <i class="fas fa-cog"></i> Pengaturan
+                </a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Cari buku, anggota...">
+                </div>
+                <div class="topbar-actions">
+                    <span id="currentTime"></span>
+                </div>
+            </header>
+
+            <!-- PAGES -->
+            <!-- DASHBOARD -->
+            <div id="dashboard" class="page active">
+                <div class="page-header">
+                    <h1><i class="fas fa-tachometer-alt"></i> Dashboard</h1>
+                    <div class="page-actions">
+                        <button id="dashboardAddBookBtn" class="btn-primary">
+                            <i class="fas fa-plus"></i> Tambah Buku
+                        </button>
+                        <button id="dashboardManageMembersBtn" class="btn-secondary">
+                            <i class="fas fa-users"></i> Kelola Anggota
+                        </button>
+                        <button id="dashboardBackupBtn" class="btn-success">
+                            <i class="fas fa-download"></i> Backup Data
+                        </button>
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card primary">
+                        <i class="fas fa-book"></i>
+                        <div>
+                            <h3 id="totalBooks">0</h3>
+                            <p>Total Buku</p>
+                        </div>
+                    </div>
+                    <div class="stat-card success">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <h3 id="totalMembers">0</h3>
+                            <p>Total Anggota</p>
+                        </div>
+                    </div>
+                    <div class="stat-card warning">
+                        <i class="fas fa-exchange-alt"></i>
+                        <div>
+                            <h3 id="activeLoans">0</h3>
+                            <p>Pinjaman Aktif</p>
+                        </div>
+                    </div>
+                    <div class="stat-card danger">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h3 id="overdueLoans">0</h3>
+                            <p>Terlambat</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOOKS -->
+            <div id="books" class="page">
+                <div class="page-header">
+                    <h1><i class="fas fa-book"></i> Manajemen Buku</h1>
+                    <div class="page-actions">
+                        <button id="addBookBtn" class="btn-primary">
+                            <i class="fas fa-plus"></i> Tambah Buku
+                        </button>
+                        <button id="bulkImportBtn" class="btn-secondary">
+                            <i class="fas fa-file-excel"></i> Import Excel
+                        </button>
+                        <button id="deleteSelectedBooksBtn" class="btn-danger">
+                            <i class="fas fa-trash"></i> Hapus Terpilih
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox"></th>
+                                <th>Judul</th>
+                                <th>Penulis</th>
+                                <th>Penerbit</th>
+                                <th>Stok</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="booksTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- MEMBERS -->
+            <div id="members" class="page">
+                <div class="page-header">
+                    <h1><i class="fas fa-users"></i> Manajemen Anggota</h1>
+                    <div class="page-actions">
+                        <button id="addMemberBtn" class="btn-primary">
+                            <i class="fas fa-plus"></i> Tambah Anggota
+                        </button>
+                        <button id="exportMembersBtn" class="btn-success">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                        <button id="blockSelectedBtn" class="btn-danger">
+                            <i class="fas fa-ban"></i> Blokir Terpilih
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox"></th>
+                                <th>Nama</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Bergabung</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="membersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- LOANS -->
+            <div id="loans" class="page">
+                <div class="page-header">
+                    <h1><i class="fas fa-exchange-alt"></i> Peminjaman</h1>
+                    <div class="page-actions">
+                        <button id="newLoanBtn" class="btn-primary">
+                            <i class="fas fa-plus"></i> Pinjam Buku Baru
+                        </button>
+                        <button id="extendLoanBtn" class="btn-warning">
+                            <i class="fas fa-clock"></i> Perpanjang Terpilih
+                        </button>
+                        <button id="returnSelectedBtn" class="btn-success">
+                            <i class="fas fa-undo"></i> Kembalikan Terpilih
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox"></th>
+                                <th>Buku</th>
+                                <th>Anggota</th>
+                                <th>Tgl Pinjam</th>
+                                <th>Jatuh Tempo</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="loansTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- REPORTS -->
+            <div id="reports" class="page">
+                <div class="page-header">
+                    <h1><i class="fas fa-chart-bar"></i> Laporan & Statistik</h1>
+                    <div class="page-actions">
+                        <button id="exportPDFBtn" class="btn-danger">
+                            <i class="fas fa-file-pdf"></i> Export PDF
+                        </button>
+                        <button id="exportExcelBtn" class="btn-success">
+                            <i class="fas fa-file-excel"></i> Export Excel
+                        </button>
+                    </div>
+                </div>
+                <div id="reportContent"></div>
+            </div>
+
+            <!-- ACTIVITY -->
+            <div id="activity" class="page">
+                <div class="page-header">
+                    <h1><i class="fas fa-history"></i> Log Aktivitas</h1>
+                </div>
+                <div id="activityList" style="padding: 20px;"></div>
+            </div>
+
+            <!-- SETTINGS -->
+            <div id="settings" class="page">
+                <div class="page-header">
+                    <h1><i class="fas fa-cog"></i> Pengaturan Sistem</h1>
+                </div>
+                <div id="settingsForm" style="padding: 20px;"></div>
+                <div style="padding: 20px;">
+                    <button id="addAdminBtn" class="btn-primary">
+                        <i class="fas fa-user-plus"></i> Tambah Admin
+                    </button>
+                    <button id="changePasswordBtn" class="btn-warning">
+                        <i class="fas fa-key"></i> Ganti Password
+                    </button>
+                    <button id="saveSettingsBtn" class="btn-success">
+                        <i class="fas fa-save"></i> Simpan Semua
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL -->
+    <div id="adminBookModal" class="modal">
+        <div class="modal-content">
+            <div id="adminBookModalContent">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+<link rel="stylesheet" href="simpus.css">
+    <script src="simpus.js"></script>
+</body>
+</html>
